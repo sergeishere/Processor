@@ -1,6 +1,32 @@
 # DynamicProcess
 
-Convenient extensions to the Swift Foundation's Process class powered by `@dynamicMemberLookup` and `@dynamicCallable` attributes.
+DynamicProcess is a simple and convenient extension to the Swift Foundation's Process class powered by `@dynamicMemberLookup` and `@dynamicCallable` attributes.
+
+``` swift
+// Before
+
+let process = Process()
+let pipe = Pipe()
+
+process.executableURL = URL(fileURLWithPath: "/usr/bin/file")
+process.arguments = ["DynamicProcess.swift"]
+process.standardOutput = pipe
+
+try process.run()
+
+if let outputData = try pipe.fileHandleForReading.readToEnd() {
+  let outputString = String(decoding: outputData, as: UTF8.self)
+  let trimmedOutput = outputString.trimmingCharacters(in: .whitespacesAndNewlines)
+  print(trimmedOutput) // "DynamicProcess.swift: ASCII text"
+}
+
+// After
+
+let file = Process(executablePath: "/usr/bin/file")
+let fileInfo = try file("DynamicProcess.swift")
+print(fileInfo) // "DynamicProcess.swift: ASCII text"
+
+```
 
 # Usage
 
