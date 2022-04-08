@@ -30,33 +30,24 @@ print(fileInfo) // "DynamicProcess.swift: ASCII text"
 
 # Usage
 
-Examples of using some shell commands:
+Examples of usage of some shell commands:
 
-- Pwd: `pwd`
+``` swift
+// pwd
+let pwd = DynamicProcess(executablePath: "/bin/pwd")
+let currentDir = try pwd()
 
-  ``` swift
-  let pwd = DynamicProcess(executablePath: "/bin/pwd")
-  let currentDir = try pwd()
-  ```
+// ls -la
+let ls = DynamicProcess(executablePath: "/bin/ls")
+let filesList = try ls("-la")
 
-- Ls: `ls -la`
+// swift help
+let swift = DynamicProcess(executablePath: "/usr/bin/swift")
+let help = try swift.help()
 
-  ``` swift
-  let ls = DynamicProcess(executablePath: "/bin/ls")
-  let filesList = try ls("-la")
-  ```
-
-- Swift: `swift help`
-
-  ``` swift
-  let swift = DynamicProcess(executablePath: "/usr/bin/swift")
-  let help = try swift.help()
-  ```
-  
-- Git: `git rev-list --count main`
-
-  ``` swift
-  let git = DynamicProcess(executablePath: "/usr/bin/git")
-  let currentBranch = try git.branch("--show-current")
-  let commitsCount = try git("rev-list", "--count", currentBranch)
-  ```
+// CURRENT_BRANCH=$(git branch --show-current)
+// git rev-list --count $CURRENT_BRANCH
+let git = DynamicProcess(executablePath: "/usr/bin/git")
+let currentBranch = try git.branch("--show-current")
+let commitsCount = try git("rev-list", "--count", currentBranch)
+```
