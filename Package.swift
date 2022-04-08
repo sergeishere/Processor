@@ -4,22 +4,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "DynamicProcess",
+    name: "Processor",
     platforms: [
         .macOS(.v10_13)
     ],
     products: [
         .library(
-            name: "DynamicProcess",
-            targets: ["DynamicProcess"]),
+            name: "Processor",
+            targets: ["Processor"]),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "DynamicProcess",
+            name: "Processor",
             dependencies: []),
         .testTarget(
-            name: "DynamicProcessTests",
-            dependencies: ["DynamicProcess"]),
+            name: "ProcessorTests",
+            dependencies: ["Processor"]),
     ]
 )

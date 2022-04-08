@@ -2,7 +2,7 @@ import Foundation
 
 @dynamicMemberLookup
 @dynamicCallable
-public struct DynamicProcess {
+public struct Processor {
 
     public let executablePath: String
     public let arguments: [String]
@@ -16,7 +16,7 @@ public struct DynamicProcess {
     }
     
     subscript(dynamicMember member: String) -> Self {
-        DynamicProcess(executablePath: executablePath, arguments: arguments + [member])
+        Processor(executablePath: executablePath, arguments: arguments + [member])
     }
     
     @discardableResult
