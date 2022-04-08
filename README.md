@@ -1,6 +1,6 @@
 # DynamicProcess
 
-DynamicProcess is a simple and convenient extension to the Swift Foundation's Process class powered by `@dynamicMemberLookup` and `@dynamicCallable` attributes.
+DynamicProcess is a simple struct powered by `@dynamicMemberLookup` and `@dynamicCallable` attributes which makes it easier to work with a Process class from a swift code.
 
 ``` swift
 // Before
@@ -22,7 +22,7 @@ if let outputData = try pipe.fileHandleForReading.readToEnd() {
 
 // After
 
-let file = Process(executablePath: "/usr/bin/file")
+let file = DynamicProcess(executablePath: "/usr/bin/file")
 let fileInfo = try file("DynamicProcess.swift")
 print(fileInfo) // "DynamicProcess.swift: ASCII text"
 
@@ -35,28 +35,28 @@ Examples of using some shell commands:
 - Pwd: `pwd`
 
   ``` swift
-  let pwd = Process(executablePath: "/bin/pwd")
+  let pwd = DynamicProcess(executablePath: "/bin/pwd")
   let currentDir = try pwd()
   ```
 
 - Ls: `ls -la`
 
   ``` swift
-  let ls = Process(executablePath: "/bin/ls")
+  let ls = DynamicProcess(executablePath: "/bin/ls")
   let filesList = try ls("-la")
   ```
 
 - Swift: `swift help`
 
   ``` swift
-  let swift = Process(executablePath: "/usr/bin/swift")
+  let swift = DynamicProcess(executablePath: "/usr/bin/swift")
   let help = try swift.help()
   ```
   
 - Git: `git rev-list --count main`
 
   ``` swift
-  let git = Process(executablePath: "/usr/bin/git")
+  let git = DynamicProcess(executablePath: "/usr/bin/git")
   let currentBranch = try git.branch("--show-current")
   let commitsCount = try git("rev-list", "--count", currentBranch)
   ```
