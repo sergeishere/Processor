@@ -4,28 +4,37 @@ import XCTest
 final class DynamicProcessTests: XCTestCase {
     
     func testStandardRun() throws {
-        let pwd = Process(executablePath: "/bin/pwd")
+        let pwd = DynamicProcess(executablePath: "/bin/pwd")
         XCTAssertNoThrow(try pwd.run())
     }
     
     func testDynamicCall() throws {
-        let pwd = Process(executablePath: "/bin/pwd")
+        let pwd = DynamicProcess(executablePath: "/bin/pwd")
         let result = try pwd()
         XCTAssertFalse(result.isEmpty)
     }
     
     func testDynamicMember() throws {
-        let swift = Process(executablePath: "/usr/bin/swift")
+        let swift = DynamicProcess(executablePath: "/usr/bin/swift")
         let result = try swift.help.package()
-        print(result)
         XCTAssertFalse(result.isEmpty)
     }
     
     func testDynamicMemberAndDynamicCall() throws {
-        let swift = Process(executablePath: "/usr/bin/swift")
+        let swift = DynamicProcess(executablePath: "/usr/bin/swift")
         let result = try swift.help.package("-h")
-        print(result)
         XCTAssertFalse(result.isEmpty)
+    }
+    
+    func testOneProcessSeveralCommands() throws {
+        let touch = DynamicProcess(executablePath: "/usr/bin/touch")
+        try touch("File1")
+        try touch("File2")
+        
+        let file = DynamicProcess(executablePath: "/usr/bin/file")
+        let firstFileInfo = try file("File1")   // File1: empty
+        let secondFileInfo = try file("File2")  // File2: empty
+        XCTAssertNotEqual(firstFileInfo, secondFileInfo)
     }
     
 }
