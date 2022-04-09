@@ -7,7 +7,7 @@ public struct Processor {
     public let executablePath: String
     public let arguments: [String]
     
-    internal init(
+    public init(
         executablePath: String,
         arguments: [String] = []
     ) {
@@ -15,12 +15,12 @@ public struct Processor {
         self.arguments = arguments
     }
     
-    subscript(dynamicMember member: String) -> Self {
+    public subscript(dynamicMember member: String) -> Self {
         Processor(executablePath: executablePath, arguments: arguments + [member])
     }
     
     @discardableResult
-    func dynamicallyCall(withArguments args: [String]) throws -> String {
+    public func dynamicallyCall(withArguments args: [String]) throws -> String {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: executablePath)
         process.arguments = arguments + args
