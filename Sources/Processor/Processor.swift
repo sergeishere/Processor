@@ -22,6 +22,10 @@ public struct Processor {
         Processor(executablePath: executablePath, arguments: arguments, environment: environment)
     }
     
+    public func arguments(_ arguments: [String]) -> Self {
+        Processor(executablePath: executablePath, arguments: self.arguments + arguments, environment: environment)
+    }
+    
     public subscript(dynamicMember member: String) -> Self {
         Processor(executablePath: executablePath, arguments: arguments + [member])
     }
