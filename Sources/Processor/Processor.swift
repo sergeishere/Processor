@@ -7,22 +7,23 @@ public struct Processor {
     public let executablePath: String
     public let arguments: [String]
     public let environment: [String: String]?
-    public let pipe: Pipe?
+    
+    public struct ProcessError: Error, CustomStringConvertible {
+        public var description: String
+    }
     
     public init(
         executablePath: String,
         arguments: [String] = [],
-        environment: [String: String]? = nil,
-        pipe: Pipe? = Pipe()
+        environment: [String: String]? = nil
     ) {
         self.executablePath = executablePath
         self.arguments = arguments
         self.environment = environment
-        self.pipe = pipe
     }
     
     public subscript(dynamicMember member: String) -> Self {
-        Processor(executablePath: executablePath, arguments: arguments + [member])
+        Processor(executablePath: executablePath, arguments: arguments + [member], environment: environment)
     }
     
     @discardableResult
@@ -49,7 +50,7 @@ public struct Processor {
     public func dynamicallyCall(
         withArguments args: [String]
     ) throws -> String {
-        try run(arguments: arguments, environment: [:])
+        return try await run(arguments: args, environment: [:])
     }
     
     
