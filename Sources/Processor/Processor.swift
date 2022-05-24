@@ -25,6 +25,7 @@ public struct Processor {
         Processor(executablePath: executablePath, arguments: arguments + [member])
     }
     
+    @discardableResult
     public func run(
         arguments: [String] = [],
         environment: [String: String] = [:]
