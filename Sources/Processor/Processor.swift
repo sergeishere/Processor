@@ -35,6 +35,8 @@ public struct Processor {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: executablePath)
         process.arguments = self.arguments + arguments
+        
+        let pipe = Pipe()
         process.standardOutput = pipe
         
         let predefinedEnvironment = self.environment ?? [:]
@@ -42,7 +44,7 @@ public struct Processor {
         
         try process.run()
         
-        return try pipe?.fileHandleForReading.readToEndAndTrim() ?? ""
+        return try pipe.fileHandleForReading.readToEndAndTrim()
         
     }
     
@@ -50,7 +52,7 @@ public struct Processor {
     public func dynamicallyCall(
         withArguments args: [String]
     ) throws -> String {
-        return try await run(arguments: args, environment: [:])
+        return try run(arguments: args, environment: [:])
     }
     
     
