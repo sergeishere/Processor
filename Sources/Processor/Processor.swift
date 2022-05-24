@@ -15,7 +15,7 @@ public struct Processor {
     public init(
         executablePath: String,
         arguments: [String] = [],
-        environment: [String: String]? = ProcessInfo.processInfo.environment
+        environment: [String: String]?
     ) {
         self.executablePath = executablePath
         self.arguments = arguments
@@ -35,7 +35,7 @@ public struct Processor {
         
         let pipe = Pipe()
         process.standardOutput = pipe
-        process.environment = environment
+        environment.map { process.environment = $0 }
         
         try process.run()
         
