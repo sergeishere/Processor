@@ -15,7 +15,7 @@ public struct Processor {
     public init(
         executablePath: String,
         arguments: [String] = [],
-        environment: [String: String]?
+        environment: [String: String]? = nil
     ) {
         self.executablePath = executablePath
         self.arguments = arguments
