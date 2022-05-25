@@ -49,13 +49,6 @@ public struct Processor {
         environment.map { process.environment = $0 }
         
         try process.run()
-        process.waitUntilExit()
-        guard process.terminationReason == .exit && process.terminationStatus == 0
-        else { throw ProcessError(
-            processName: executableURL.lastPathComponent,
-            terminationStatus: process.terminationStatus,
-            output: try? pipe.fileHandleForReading.readToEndAndTrim()
-        ) }
         
         return try pipe.fileHandleForReading.readToEndAndTrim()
         
