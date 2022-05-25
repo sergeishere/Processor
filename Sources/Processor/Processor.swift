@@ -11,14 +11,17 @@ public struct Processor {
     public struct ProcessError: Error, CustomStringConvertible {
         public let processName: String
         public let terminationStatus: Int32
-        public let output: String?
+        public let errorOutput: String?
+        public let standardOutput: String?
         
         public var description: String {
-            let message = [
+            [
                 "Process \(processName) ended with termination status: \(terminationStatus).",
-                output
-            ].compactMap { $0 }.joined(separator: "\n\n")
-            return message
+                "Error output:", errorOutput,
+                "Standard output:", standardOutput
+            ]
+                .compactMap { $0 }
+                .joined(separator: "\n")
         }
     }
     
@@ -46,9 +49,25 @@ public struct Processor {
         
         let pipe = Pipe()
         process.standardOutput = pipe
+        
+        let errorPipe = Pipe()
+        process.standardError = errorPipe
+        
         environment.map { process.environment = $0 }
         
         try process.run()
+        process.waitUntilExit()
+        
+        guard process.terminationStatus == 0
+        else {
+            throw ProcessError(
+                processName: executableURL.lastPathComponent,
+                terminationStatus: process.terminationStatus,
+                errorOutput: try? errorPipe.fileHandleForReading.readToEndAndTrim(),
+                standardOutput: try? pipe.fileHandleForReading.readToEndAndTrim()
+            )
+        }
+        print(process.terminationStatus, process.terminationReason)
         
         return try pipe.fileHandleForReading.readToEndAndTrim()
         

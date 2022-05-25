@@ -44,4 +44,9 @@ final class ProcessorTests: XCTestCase {
         
     }
     
+    func testError() throws {
+        let swift = Processor(executablePath: "/usr/bin/swift")
+        XCTAssertThrowsError(try swift.generateError())
+    }
+    
 }
